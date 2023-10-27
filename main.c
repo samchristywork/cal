@@ -70,5 +70,22 @@ int days_in_month(int month, int year) {
   }
 }
 
+void print_calendar() {
+  write_row(get_header(month, year));
+  write_row(header);
+
+  for (;;) {
+    int day_displayed = 0;
+
+    char *row = print_week(&sunday_before, now, first_day, last_day);
+    if (!row) {
+      write_row("                    ");
+      break;
+    } else {
+      write_row(row);
+    }
+  }
+}
+
 int main() {
 }
