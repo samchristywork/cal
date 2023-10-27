@@ -23,5 +23,38 @@ char *get_header(int month, int year) {
   return line;
 }
 
+void write_row(const char *s) {
+  fwrite(s, 1, strlen(header), stdout);
+  printf("\n");
+}
+
+char *print_week(time_t *day, time_t now, time_t start_of_month,
+                 time_t end_of_month) {
+  char *line = malloc(strlen(header) + 1);
+  memset(line, ' ', strlen(header));
+
+  int day_displayed = 0;
+
+  for (int i = 0; i < 7; i++) {
+    struct tm *sunday_before_local = localtime(day);
+
+    if (*day < start_of_month || *day > end_of_month) {
+    } else {
+      char day_str[3];
+      sprintf(day_str, "%2d", sunday_before_local->tm_mday);
+      memcpy(line + i * 3, day_str, 2);
+      day_displayed = 1;
+    }
+
+    (*day) += 24 * 60 * 60;
+  }
+
+  if (day_displayed) {
+    return line;
+  } else {
+    return NULL;
+  }
+}
+
 int main() {
 }
