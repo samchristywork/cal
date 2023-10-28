@@ -9,6 +9,10 @@ const char *months[] = {"January",   "February", "March",    "April",
                         "May",       "June",     "July",     "August",
                         "September", "October",  "November", "December"};
 
+char *invert = "\033[7m";
+
+char *reset = "\033[0m";
+
 char *get_header(int month, int year) {
   int spacing_amt = (strlen(header) - sizeof(months[month - 1]) - 4) / 2;
 
@@ -23,15 +27,8 @@ char *get_header(int month, int year) {
   return line;
 }
 
-void write_row(const char *s) {
-  fwrite(s, 1, strlen(header), stdout);
-  printf("\n");
-}
-
-char *print_week(time_t *day, time_t now, time_t start_of_month,
-                 time_t end_of_month) {
-  char *line = malloc(strlen(header) + 1);
-  memset(line, ' ', strlen(header));
+int print_week(time_t *day, time_t now, time_t start_of_month,
+               time_t end_of_month) {
 
   int day_displayed = 0;
 
@@ -40,20 +37,18 @@ char *print_week(time_t *day, time_t now, time_t start_of_month,
 
     if (*day < start_of_month || *day > end_of_month) {
     } else {
-      char day_str[3];
-      sprintf(day_str, "%2d", sunday_before_local->tm_mday);
-      memcpy(line + i * 3, day_str, 2);
+      printf("%2d", sunday_before_local->tm_mday);
       day_displayed = 1;
+    }
+
+    if (i != 6) {
+      printf(" ");
     }
 
     (*day) += 24 * 60 * 60;
   }
 
-  if (day_displayed) {
-    return line;
-  } else {
-    return NULL;
-  }
+  return day_displayed;
 }
 
 int days_in_month(int month, int year) {
@@ -72,23 +67,20 @@ int days_in_month(int month, int year) {
 
 void print_calendar(int month, int year, time_t sunday_before, time_t now,
                     time_t first_day, time_t last_day) {
-  write_row(get_header(month, year));
-  write_row(header);
+  printf("%s\n", get_header(month, year));
+  printf("%s\n", header);
 
   for (;;) {
-    int day_displayed = 0;
-
-    char *row = print_week(&sunday_before, now, first_day, last_day);
-    if (!row) {
-      write_row("                    ");
+    if (!print_week(&sunday_before, now, first_day, last_day)) {
       break;
-    } else {
-      write_row(row);
     }
+    printf("\n");
   }
+
+  printf("\n");
 }
 
-int main() {
+int main(void) {
   time_t now;
   time(&now);
   struct tm *local = localtime(&now);
