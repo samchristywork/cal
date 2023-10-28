@@ -30,7 +30,7 @@ char *get_header(int year, int month) {
   return line;
 }
 
-int print_week(time_t *day, int *num_days, int month) {
+int print_week(time_t *day, int month) {
   int day_displayed = 0;
 
   for (int i = 0; i < 7; i++) {
@@ -58,8 +58,6 @@ int print_week(time_t *day, int *num_days, int month) {
       printf(" ");
     }
 
-    (*num_days)--;
-
     (*day) += 24 * 60 * 60;
   }
 
@@ -80,8 +78,19 @@ int days_in_month(int month, int year) {
   }
 }
 
-void print_calendar(int month, int year, time_t start, int num_days) {
-  printf("%s\n", get_header(month, year));
+time_t get_time(int year, int month) {
+  struct tm t;
+
+  t.tm_mon = month - 1;
+  t.tm_year = year - 1900;
+  t.tm_mday = 1;
+  t.tm_hour = 0;
+  t.tm_min = 0;
+  t.tm_sec = 0;
+
+  return mktime(&t);
+}
+
   printf("%s\n", header);
 
   for (;;) {
