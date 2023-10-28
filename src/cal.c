@@ -91,6 +91,23 @@ time_t get_time(int year, int month) {
   return mktime(&t);
 }
 
+void print_calendar_row(int year, int month, int row) {
+  time_t t = get_time(year, month);
+
+  struct tm *local = localtime(&t);
+  int day = local->tm_mday;
+
+  time_t first_day = t - (day - 1) * 24 * 60 * 60;
+  struct tm *first_day_local = localtime(&first_day);
+
+  time_t sunday_before = first_day - first_day_local->tm_wday * 24 * 60 * 60;
+  time_t start = sunday_before + row * 7 * 24 * 60 * 60;
+
+  print_week(&start, month);
+}
+
+void print_month(int year, int month) {
+  printf("%s\n", get_header(year, month));
   printf("%s\n", header);
 
   for (;;) {
