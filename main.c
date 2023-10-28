@@ -70,7 +70,8 @@ int days_in_month(int month, int year) {
   }
 }
 
-void print_calendar() {
+void print_calendar(int month, int year, time_t sunday_before, time_t now,
+                    time_t first_day, time_t last_day) {
   write_row(get_header(month, year));
   write_row(header);
 
@@ -88,4 +89,29 @@ void print_calendar() {
 }
 
 int main() {
+  time_t now;
+  time(&now);
+  struct tm *local = localtime(&now);
+
+  int year = local->tm_year + 1900;
+  int month = local->tm_mon + 1;
+  int day = local->tm_mday;
+
+  time_t first_day;
+  struct tm *first_day_local;
+
+  first_day = now - (day - 1) * 24 * 60 * 60;
+  first_day_local = localtime(&first_day);
+
+  int first_day_weekday = first_day_local->tm_wday;
+
+  time_t sunday_before;
+  struct tm *sunday_before_local;
+
+  sunday_before = first_day - first_day_weekday * 24 * 60 * 60;
+  sunday_before_local = localtime(&sunday_before);
+
+  time_t last_day = first_day + (days_in_month(month, year) - 1) * 24 * 60 * 60;
+
+  print_calendar(month, year, sunday_before, now, first_day, last_day);
 }
