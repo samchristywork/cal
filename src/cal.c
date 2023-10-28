@@ -35,10 +35,20 @@ int print_week(time_t *day, time_t now, time_t start_of_month,
   for (int i = 0; i < 7; i++) {
     struct tm *sunday_before_local = localtime(day);
 
+    int is_current_day = now >= *day && now < *day + 24 * 60 * 60;
+
+    if (is_current_day) {
+      printf("%s", invert);
+    }
+
     if (*day < start_of_month || *day > end_of_month) {
     } else {
       printf("%2d", sunday_before_local->tm_mday);
       day_displayed = 1;
+    }
+
+    if (is_current_day) {
+      printf("%s", reset);
     }
 
     if (i != 6) {
