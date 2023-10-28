@@ -11,3 +11,11 @@ build/cal: build/cal.o
 build/%.o: src/%.c
 	mkdir -p build
 	$(CC) $(CFLAGS) -c $< -o $@
+
+.PHONY: run
+run: build/cal
+	./build/cal
+
+.PHONY: clean
+clean:
+	rm -f build/*.o build/cal
