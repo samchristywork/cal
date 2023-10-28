@@ -13,6 +13,8 @@ char *invert = "\033[7m";
 
 char *reset = "\033[0m";
 
+time_t now;
+
 char *get_header(int month, int year) {
   int spacing_amt = (strlen(header) - sizeof(months[month - 1]) - 4) / 2;
 
@@ -27,9 +29,7 @@ char *get_header(int month, int year) {
   return line;
 }
 
-int print_week(time_t *day, time_t now, time_t start_of_month,
-               time_t end_of_month) {
-
+int print_week(time_t *day, int *num_days, int month) {
   int day_displayed = 0;
 
   for (int i = 0; i < 7; i++) {
@@ -41,10 +41,12 @@ int print_week(time_t *day, time_t now, time_t start_of_month,
       printf("%s", invert);
     }
 
-    if (*day < start_of_month || *day > end_of_month) {
-    } else {
+    int is_in_month = (sunday_before_local->tm_mon + 1) == month;
+    if (is_in_month) {
       printf("%2d", sunday_before_local->tm_mday);
       day_displayed = 1;
+    } else {
+      printf("  ");
     }
 
     if (is_current_day) {
@@ -54,6 +56,8 @@ int print_week(time_t *day, time_t now, time_t start_of_month,
     if (i != 6) {
       printf(" ");
     }
+
+    (*num_days)--;
 
     (*day) += 24 * 60 * 60;
   }
@@ -75,15 +79,16 @@ int days_in_month(int month, int year) {
   }
 }
 
-void print_calendar(int month, int year, time_t sunday_before, time_t now,
-                    time_t first_day, time_t last_day) {
+void print_calendar(int month, int year, time_t start, int num_days) {
   printf("%s\n", get_header(month, year));
   printf("%s\n", header);
 
   for (;;) {
-    if (!print_week(&sunday_before, now, first_day, last_day)) {
+    print_week(&start, &num_days, month);
+    if (num_days <= 0) {
       break;
     }
+
     printf("\n");
   }
 
@@ -91,7 +96,6 @@ void print_calendar(int month, int year, time_t sunday_before, time_t now,
 }
 
 int main(void) {
-  time_t now;
   time(&now);
   struct tm *local = localtime(&now);
 
@@ -115,5 +119,7 @@ int main(void) {
 
   time_t last_day = first_day + (days_in_month(month, year) - 1) * 24 * 60 * 60;
 
-  print_calendar(month, year, sunday_before, now, first_day, last_day);
+  int num_days = (last_day - sunday_before) / (24 * 60 * 60) + 1;
+
+  print_calendar(month, year, sunday_before, num_days);
 }
