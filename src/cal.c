@@ -109,13 +109,50 @@ void print_calendar_row(int year, int month, int row) {
 void print_month(int year, int month) {
   printf("%s\n", get_header(year, month));
   printf("%s\n", header);
+  for (int i = 0; i < 5; i++) {
+    print_calendar_row(year, month, i);
+    printf("\n");
+  }
+}
 
-  for (;;) {
-    print_week(&start, &num_days, month);
-    if (num_days <= 0) {
-      break;
+void print_three_months(int year, int month) {
+
+  // Print header
+  for (int i = -1; i < 2; i++) {
+    int m = month + i;
+    int y = year;
+    if (m < 1) {
+      m = 12 + m;
+      y--;
+    } else if (m > 12) {
+      m = m - 12;
+      y++;
     }
+    printf("%s  ", get_header(y, m));
+  }
+  printf("\n");
 
+  // Print days
+  printf("%s  ", header);
+  printf("%s  ", header);
+  printf("%s", header);
+  printf("\n");
+
+  // Print weeks
+  for (int i = 0; i < 5; i++) {
+    for (int j = -1; j < 2; j++) {
+      int m = month + j;
+      int y = year;
+      if (m < 1) {
+        m = 12 + m;
+        y--;
+      } else if (m > 12) {
+        m = m - 12;
+        y++;
+      }
+      print_calendar_row(y, m, i);
+      printf("  ");
+    }
     printf("\n");
   }
 
@@ -128,25 +165,6 @@ int main(void) {
 
   int year = local->tm_year + 1900;
   int month = local->tm_mon + 1;
-  int day = local->tm_mday;
 
-  time_t first_day;
-  struct tm *first_day_local;
-
-  first_day = now - (day - 1) * 24 * 60 * 60;
-  first_day_local = localtime(&first_day);
-
-  int first_day_weekday = first_day_local->tm_wday;
-
-  time_t sunday_before;
-  struct tm *sunday_before_local;
-
-  sunday_before = first_day - first_day_weekday * 24 * 60 * 60;
-  sunday_before_local = localtime(&sunday_before);
-
-  time_t last_day = first_day + (days_in_month(month, year) - 1) * 24 * 60 * 60;
-
-  int num_days = (last_day - sunday_before) / (24 * 60 * 60) + 1;
-
-  print_calendar(month, year, sunday_before, num_days);
+  print_three_months(year, month);
 }
