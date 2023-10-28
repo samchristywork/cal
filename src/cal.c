@@ -15,11 +15,12 @@ char *reset = "\033[0m";
 
 time_t now;
 
-char *get_header(int month, int year) {
+char *get_header(int year, int month) {
   int spacing_amt = (strlen(header) - sizeof(months[month - 1]) - 4) / 2;
 
-  char *line = malloc(strlen(header));
+  char *line = malloc(strlen(header) + 1);
   memset(line, ' ', strlen(header));
+  line[strlen(header)] = '\0';
 
   char date[100];
   sprintf(date, "%s %d", months[month - 1], year);
