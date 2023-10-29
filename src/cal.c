@@ -159,6 +159,13 @@ void print_three_months(int year, int month) {
   printf("\n");
 }
 
+void print_year(int year) {
+  for (int i = 1; i <= 12; i += 3) {
+    printf("Printing months %d-%d\n", i, i + 2);
+    print_three_months(year, i + 1);
+  }
+}
+
 int main(void) {
   time(&now);
   struct tm *local = localtime(&now);
