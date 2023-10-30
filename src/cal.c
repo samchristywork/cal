@@ -109,7 +109,7 @@ void print_calendar_row(int year, int month, int row) {
 void print_month(int year, int month) {
   printf("%s\n", get_header(year, month));
   printf("%s\n", header);
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < 6; i++) {
     print_calendar_row(year, month, i);
     printf("\n");
   }
@@ -139,7 +139,7 @@ void print_three_months(int year, int month) {
   printf("\n");
 
   // Print weeks
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < 6; i++) {
     for (int j = -1; j < 2; j++) {
       int m = month + j;
       int y = year;
@@ -155,8 +155,6 @@ void print_three_months(int year, int month) {
     }
     printf("\n");
   }
-
-  printf("\n");
 }
 
 void print_year(int year) {
