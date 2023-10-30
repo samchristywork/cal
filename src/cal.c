@@ -163,12 +163,41 @@ void print_year(int year) {
   }
 }
 
-int main(void) {
+int main(int argc, char *argv[]) {
+  int month = 0;
+  int year = 0;
+  int show_three_months = 0;
+
   time(&now);
-  struct tm *local = localtime(&now);
 
-  int year = local->tm_year + 1900;
-  int month = local->tm_mon + 1;
+  for (int i = 0; i < argc; i++) {
+    if (strcmp(argv[i], "-y") == 0) {
+      struct tm *local = localtime(&now);
+      year = local->tm_year + 1900;
+    } else if (strcmp(argv[i], "-3") == 0) {
+      show_three_months = 1;
+    } else {
+      if (year == 0) {
+        year = atoi(argv[i]);
+      } else {
+        month = year;
+        year = atoi(argv[i]);
+      }
+    }
+  }
 
-  print_three_months(year, month);
+  if (month == 0 && year == 0) {
+    struct tm *local = localtime(&now);
+    year = local->tm_year + 1900;
+    month = local->tm_mon + 1;
+  }
+
+  if (show_three_months) {
+    print_three_months(year, month);
+  } else if (month == 0) {
+    print_year(year);
+  } else {
+    print_month(year, month);
+  }
+
 }
