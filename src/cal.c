@@ -169,8 +169,13 @@ void print_three_months(int year, int month, bool year_in_header) {
 }
 
 void print_year(int year) {
+  char *header = malloc(100);
+  sprintf(header, "%d", year);
+  printf("%s\n", center(header, 66));
+  printf("\n");
+
   for (int i = 1; i <= 12; i += 3) {
-    print_three_months(year, i + 1);
+    print_three_months(year, i + 1, false);
   }
 }
 
