@@ -174,8 +174,8 @@ int main(int argc, char *argv[]) {
 
   for (int i = 0; i < argc; i++) {
     if (strcmp(argv[i], "-y") == 0) {
-      struct tm *local = localtime(&now);
-      year = local->tm_year + 1900;
+      // struct tm *local = localtime(&now);
+      // year = local->tm_year + 1900;
     } else if (strcmp(argv[i], "-3") == 0) {
       show_three_months = 1;
     } else {
