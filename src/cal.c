@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -25,19 +26,16 @@ char *reset = "\033[0m";
 
 time_t now;
 
-char *get_header(int year, int month) {
-  int spacing_amt = (strlen(header) - sizeof(months[month - 1]) - 4) / 2;
-
-  char *line = malloc(strlen(header) + 1);
-  memset(line, ' ', strlen(header));
-  line[strlen(header)] = '\0';
-
-  char date[100];
-  sprintf(date, "%s %d", months[month - 1], year);
-
-  strncpy(line + spacing_amt, date, strlen(date));
-
-  return line;
+char *get_header(int year, int month, bool year_in_header) {
+  if (year_in_header) {
+    char *header = malloc(100);
+    sprintf(header, "%s %d", months[month - 1], year);
+    return center(header, 20);
+  } else {
+    char *header = malloc(100);
+    sprintf(header, "%s", months[month - 1]);
+    return center(header, 20);
+  }
 }
 
 int print_week(time_t *day, int month) {
@@ -119,7 +117,7 @@ void print_calendar_row(int year, int month, int row) {
 }
 
 void print_month(int year, int month) {
-  printf("%s\n", get_header(year, month));
+  printf("%s\n", get_header(year, month, true));
   printf("%s\n", header);
   for (int i = 0; i < 6; i++) {
     print_calendar_row(year, month, i);
@@ -127,7 +125,7 @@ void print_month(int year, int month) {
   }
 }
 
-void print_three_months(int year, int month) {
+void print_three_months(int year, int month, bool year_in_header) {
 
   // Print header
   for (int i = -1; i < 2; i++) {
@@ -140,7 +138,8 @@ void print_three_months(int year, int month) {
       m = m - 12;
       y++;
     }
-    printf("%s  ", get_header(y, m));
+
+    printf("%s", get_header(y, m, year_in_header));
   }
   printf("\n");
 
@@ -205,7 +204,7 @@ int main(int argc, char *argv[]) {
   }
 
   if (show_three_months) {
-    print_three_months(year, month);
+    print_three_months(year, month, true);
   } else if (month == 0) {
     print_year(year);
   } else {
