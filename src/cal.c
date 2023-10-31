@@ -81,6 +81,8 @@ int days_in_month(int month, int year) {
 time_t get_time(int year, int month) {
   struct tm t;
 
+  memset(&t, 0, sizeof(t));
+
   t.tm_mon = month - 1;
   t.tm_year = year - 1900;
   t.tm_mday = 1;
