@@ -46,11 +46,12 @@ int print_week(time_t *day, int month) {
 
     int is_current_day = now >= *day && now < *day + 24 * 60 * 60;
 
-    if (is_current_day) {
+    int is_in_month = (sunday_before_local->tm_mon + 1) == month;
+
+    if (is_current_day && is_in_month) {
       printf("%s", invert);
     }
 
-    int is_in_month = (sunday_before_local->tm_mon + 1) == month;
     if (is_in_month) {
       printf("%2d", sunday_before_local->tm_mday);
       day_displayed = 1;
@@ -58,7 +59,7 @@ int print_week(time_t *day, int month) {
       printf("  ");
     }
 
-    if (is_current_day) {
+    if (is_current_day && is_in_month) {
       printf("%s", reset);
     }
 
