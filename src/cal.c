@@ -3,6 +3,16 @@
 #include <string.h>
 #include <time.h>
 
+char *center(char *str, int width) {
+  int len = strlen(str);
+  int padding = (width - len + 1) / 2;
+  char *result = malloc(width + 1);
+  memset(result, ' ', width);
+  memcpy(result + padding, str, len);
+  result[width] = '\0';
+  return result;
+}
+
 const char *header = "Su Mo Tu We Th Fr Sa";
 
 const char *months[] = {"January",   "February", "March",    "April",
