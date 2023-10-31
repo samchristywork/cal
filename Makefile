@@ -16,7 +16,7 @@ build/%.o: src/%.c
 test: build/cal
 	diff -u --color=always <(cal 2 2023) <(./build/cal 2 2023)
 	diff -u --color=always <(cal 2 2024) <(./build/cal 2 2024)
-	dfif -u --color=always <(cal 2 2025) <(./build/cal 2 2025)
+	diff -u --color=always <(cal 2 2025) <(./build/cal 2 2025)
 	diff -u --color=always <(cal -y 2023) <(./build/cal -y 2023)
 	diff -u --color=always <(cal -3 2 2023) <(./build/cal -3 2 2023)
 
