@@ -12,6 +12,14 @@ build/%.o: src/%.c
 	mkdir -p build
 	$(CC) $(CFLAGS) -c $< -o $@
 
+.PHONY: test
+test: build/cal
+	diff -u --color=always <(cal 2 2023) <(./build/cal 2 2023)
+	diff -u --color=always <(cal 2 2024) <(./build/cal 2 2024)
+	dfif -u --color=always <(cal 2 2025) <(./build/cal 2 2025)
+	diff -u --color=always <(cal -y 2023) <(./build/cal -y 2023)
+	diff -u --color=always <(cal -3 2 2023) <(./build/cal -3 2 2023)
+
 .PHONY: run
 run: build/cal
 	./build/cal
