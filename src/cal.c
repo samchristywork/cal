@@ -202,4 +202,5 @@ int main(int argc, char *argv[]) {
     print_month(year, month);
   }
 
+  fflush(stdout);
 }
