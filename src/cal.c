@@ -127,6 +127,14 @@ void print_month(int year, int month) {
 
 void print_three_months(int year, int month, bool year_in_header) {
 
+  char *normal_spacing = "  ";
+  char *wide_spacing = "   ";
+  char *spacing = normal_spacing;
+
+  if (!year_in_header) {
+    spacing = wide_spacing;
+  }
+
   // Print header
   for (int i = -1; i < 2; i++) {
     int m = month + i;
@@ -140,12 +148,16 @@ void print_three_months(int year, int month, bool year_in_header) {
     }
 
     printf("%s", get_header(y, m, year_in_header));
+
+    if (i == -1 || i == 0) {
+      printf("%s", spacing);
+    }
   }
   printf("\n");
 
   // Print days
-  printf("%s  ", header);
-  printf("%s  ", header);
+  printf("%s%s", header, spacing);
+  printf("%s%s", header, spacing);
   printf("%s", header);
   printf("\n");
 
@@ -162,7 +174,9 @@ void print_three_months(int year, int month, bool year_in_header) {
         y++;
       }
       print_calendar_row(y, m, i);
-      printf("  ");
+      if (j == -1 || j == 0) {
+        printf("%s", spacing);
+      }
     }
     printf("\n");
   }
