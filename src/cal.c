@@ -204,7 +204,7 @@ int main(int argc, char *argv[]) {
 
   time(&now);
 
-  for (int i = 0; i < argc; i++) {
+  for (int i = 1; i < argc; i++) {
     if (strcmp(argv[i], "-y") == 0) {
       // struct tm *local = localtime(&now);
       // year = local->tm_year + 1900;
