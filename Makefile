@@ -19,6 +19,8 @@ test: build/cal
 	diff -u --color=always <(cal 2 2025) <(./build/cal 2 2025)
 	diff -u --color=always <(cal -y 2023) <(./build/cal -y 2023)
 	diff -u --color=always <(cal -3 2 2023) <(./build/cal -3 2 2023)
+	diff -u --color=always <(cal 2022) <(./build/cal 2022)
+	diff -u --color=always <(cal) <(./build/cal)
 
 .PHONY: run
 run: build/cal
