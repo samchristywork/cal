@@ -213,9 +213,17 @@ int main(int argc, char *argv[]) {
     } else {
       if (year == 0) {
         year = atoi(argv[i]);
+        if (year == 0) {
+          fprintf(stderr, "Invalid year: %s\n", argv[i]);
+          exit(EXIT_FAILURE);
+        }
       } else {
         month = year;
         year = atoi(argv[i]);
+        if (year == 0) {
+          fprintf(stderr, "Invalid year: %s\n", argv[i]);
+          exit(EXIT_FAILURE);
+        }
       }
     }
   }
