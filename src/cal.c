@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <unistd.h>
 
 char *center(char *str, int width) {
   int len = strlen(str);
@@ -48,7 +49,9 @@ int print_week(time_t *day, int month) {
 
     int is_in_month = (sunday_before_local->tm_mon + 1) == month;
 
-    if (is_current_day && is_in_month) {
+    int is_a_tty = isatty(fileno(stdout));
+
+    if (is_current_day && is_in_month && is_a_tty) {
       printf("%s", invert);
     }
 
@@ -59,7 +62,7 @@ int print_week(time_t *day, int month) {
       printf("  ");
     }
 
-    if (is_current_day && is_in_month) {
+    if (is_current_day && is_in_month && is_a_tty) {
       printf("%s", reset);
     }
 
